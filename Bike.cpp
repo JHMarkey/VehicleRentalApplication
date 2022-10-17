@@ -1,12 +1,10 @@
 #include "Bike.h"
 
-Bike::Bike(string regNum, string make, string model, int age, int engineSize, int noWheels){
+Bike::Bike(string regNum, string make, string model, int age, int engineSize, int noWheels) : engineSize(engineSize), noWheels(noWheels) {
 	this->regNum = regNum;
 	this->make = make;
 	this->model = model;
 	this->age = age;
-	this->engineSize = engineSize;
-	this->noWheels = noWheels;
 	vehicleType = "Bike";
 }
 

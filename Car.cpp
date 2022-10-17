@@ -1,12 +1,10 @@
 #include "Car.h"
 
-Car::Car(string regNum, string make, string model, int age, int noDoors, int noSeats) {
+Car::Car(string regNum, string make, string model, int age, int noDoors, int noSeats) : noDoors(noDoors), noSeats(noSeats) {
 	this->regNum = regNum;
 	this->make = make;
 	this->model = model;
-	this->age = age;
-	this->noDoors = noDoors;
-	this->noSeats = noSeats;
+	this->age = age;	
 	vehicleType = "Car";
 }
 

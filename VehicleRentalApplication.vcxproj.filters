@@ -27,6 +27,9 @@
     <ClCompile Include="Bike.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Rental.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="VehicleList.txt" />
@@ -39,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Bike.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rental.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -23,6 +23,10 @@ const char separator = ' ';
 const int bigWidth = 23;
 const int midWidth = 16;
 
+struct Customer {
+	string name, address, teleN;
+};
+
 int main() {	
 
 #ifdef _DEBUG
