@@ -28,7 +28,7 @@ void Vehicle::addVehicle() {
 		{
 			vehicleFile << regNum << "," << getCostPerDay() << "," << vehicleType << "\n";
 			vehicleFile.close();
-			cout << "\nVehicle Successfully Added\n\n";
+			cout << "\Vehicle Successfully Added - " << regNum << "\n\n";
 		}
 		else cout << "\nUnable to Add Vehicle\n"
 				  << "<No File Error>\n\n";

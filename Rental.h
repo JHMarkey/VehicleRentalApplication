@@ -1,15 +1,24 @@
 #pragma once
 #include "Vehicle.h"
-#include "Main.cpp"
+#include "RentalDate.h"
+
+struct Customer {
+	string name, address, teleN;
+};
 
 class Rental
 {
-public:
-	Rental(Vehicle vehicle, int  noDays, Customer customer);
+
+public:	
+	Rental(Vehicle vehicle, int  noDays);
 	~Rental();
 
 private:
 	Vehicle vehicle;
+	 
 	int noDays;	
+	Customer customer;
 };
+
+
 

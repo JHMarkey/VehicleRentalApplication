@@ -29,7 +29,7 @@ void Bike::addVehicle() {
 		{
 			vehicleFile << regNum << "," << getCostPerDay() << "," << vehicleType << "," << engineSize << "," << noWheels << "," << age << "," << make << "," << model << "\n";
 			vehicleFile.close();
-			cout << "\nVehicle Successfully Added\n\n";
+			cout << "\nVehicle Successfully Added - " << regNum << "\n\n";
 		}
 		else cout << "Unable to Add Vehicle"
 				  << "<No File Error>\n\n";

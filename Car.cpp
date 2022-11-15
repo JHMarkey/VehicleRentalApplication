@@ -25,11 +25,11 @@ void Car::addVehicle() {
 		{
 			vehicleFile << regNum << "," << getCostPerDay() << "," << vehicleType << "," << noDoors << "," << noSeats << "," << age << "," << make << "," << model << "\n";
 			vehicleFile.close();
-			cout << "\nVehicle Successfully Added\n\n";
+			cout << "\nVehicle Successfully Added - " << regNum << "\n\n";
 		}
-		else cout << "Unable to Add Vehicle"
+		else cout << "Unable to Add Vehicle - " << regNum
 				  << "<No File Error>\n\n";
 	}
-	else cout << "\nUnable to Add Vehicle\n"
+	else cout << "\nUnable to Add Vehicle - " << regNum << "\n"
 			  << "<Unable to Verify Error>\n\n";
 }

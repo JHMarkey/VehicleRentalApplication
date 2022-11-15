@@ -18,14 +18,18 @@ void printOptions();
 bool fillTable();
 
 void AddVehicleOption();
+void RemoveVehicleOption();
+void CarSearchOption();
+void BikeSearchOption();
+void RegSortOption();
+void CostSortOption();
+
+
+
 
 const char separator = ' ';
 const int bigWidth = 23;
 const int midWidth = 16;
-
-struct Customer {
-	string name, address, teleN;
-};
 
 int main() {	
 
@@ -43,30 +47,19 @@ int main() {
 
 	char option = ' ';
 
-	do {
-	
+	do {	
 		printOptions();
 		cin >> option;
-		
+
 		switch (option) {
-		case '1':
-			AddVehicleOption();
-			break;
-		case '2': // RemoveVehicle(); 
-			break;
-		case '3': // CarSearch(); 
-			break;
-		case '4': // BikeSearch(); 
-			break;
-		case '5': // RegSearch(); 
-			break;
-		case '6': // CostSearch(); 
-			break;
-		case '9': 
-			break;
-		default:
-			cout << "Invalid Input\n\n";
-			break;
+			case '1': AddVehicleOption(); break;
+			case '2': RemoveVehicleOption(); break;
+			case '3': CarSearchOption(); break;
+			case '4': BikeSearchOption(); break;
+			case '5': RegSortOption(); break;
+			case '6': CostSortOption(); break;
+			case '9': break;
+			default: cout << "Invalid Input\n\n"; break;
 		}
 	} while (option != '9');
 
@@ -191,6 +184,41 @@ void AddVehicleOption() {
 	}
 }
 
+void RemoveVehicleOption() {
+	cout << "\n\nRemove Vehicle\n"
+		<< "--------------\n\n";
+}
+
+void CarSearchOption() {
+	cout << "\n\nCar Search\n"
+		<<"----------\n\n"
+		<< "1) Registration Number\n"
+		<< "2) Number of Seats\n"
+		<< "3) Number of Doors\n"
+		<< "4)Return to Main Menu\n\n"
+		<< "Select Option: ";
+}
+
+void BikeSearchOption() {
+	cout << "\n\nBike Search\n"
+		<< "-----------\n\n"
+		<< "1) Registration Number\n"
+		<< "2) Engine Size\n"
+		<< "3) Number of Wheels\n"
+		<< "4)Return to Main Menu\n\n"
+		<< "Select Option: ";
+}
+
+void RegSortOption() {
+	cout << "\n\nSort By Registration Number\n"
+		<<"---------------------------\n\n";
+}
+
+void CostSortOption() {
+	cout << "\n\nSort By Cost Per Day\n"
+		<< "--------------------\n\n";
+}
+
 bool fillTable() {
 	string line;
 
@@ -219,4 +247,5 @@ bool fillTable() {
 	}
 	else return false;
 }
+
 
