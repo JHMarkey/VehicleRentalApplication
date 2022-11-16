@@ -2,4 +2,3 @@ ty10kes,2300,Car,5,5,8,toyota,hilux
 yp20bpv,2450,Car,2,2,3,nissan,leaf
 yb15tfd,3300,Bike,1700,2,3,audi,lg4
 ty11kes,2800,Car,6,5,6,tesla,y
-sugmapp,61600,Bike,60000,3,69,bigpp,pp

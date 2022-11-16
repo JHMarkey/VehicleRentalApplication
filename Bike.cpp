@@ -10,13 +10,13 @@ Bike::Bike(string regNum, string make, string model, int age, int engineSize, in
 
 Bike::~Bike(){}
 
-double Bike::getCostPerDay() {
+const double Bike::getCostPerDay() const{
 	double dailyCost;
 	dailyCost = 1500 + roundEngineSize();
 	return dailyCost;
 }
 
-int Bike::roundEngineSize() {
+const int Bike::roundEngineSize() const {
 	int n = engineSize % 100;
 	n = 100 - n;
 	return engineSize + n;

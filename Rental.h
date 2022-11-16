@@ -10,12 +10,15 @@ class Rental
 {
 
 public:	
-	Rental(Vehicle vehicle, int  noDays);
+	Rental(Vehicle vehicle, int noDays);
 	~Rental();
+
+	double CalcTotalCost();
 
 private:
 	Vehicle vehicle;
-	 
+	RentalDate start;
+	RentalDate end;
 	int noDays;	
 	Customer customer;
 };

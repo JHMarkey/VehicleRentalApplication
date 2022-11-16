@@ -10,7 +10,7 @@ Car::Car(string regNum, string make, string model, int age, int noDoors, int noS
 
 Car::~Car(){}
 
-double Car::getCostPerDay(){
+const double Car::getCostPerDay() const{
 	double dailyCost;
 	dailyCost = (2500 - (age * 150 - noDoors * 200));
 	if (dailyCost < 1000) dailyCost = 1000;

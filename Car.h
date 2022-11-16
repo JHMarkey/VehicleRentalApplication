@@ -7,7 +7,7 @@ public:
 	Car(string regNum, string make, string model, int age, int noDoors, int noSeats);
 	~Car();
 
-	virtual double getCostPerDay() override;
+	virtual const double getCostPerDay() const override;
 
 	virtual void addVehicle() override;
 

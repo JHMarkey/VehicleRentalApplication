@@ -7,14 +7,14 @@ public:
 	Bike(string regNum, string make, string model, int age, int engineSize, int noWheels);
 	~Bike();
 
-	virtual double getCostPerDay() override;
+	virtual const double getCostPerDay() const override;
 
 	virtual void addVehicle() override;
 
 	//void bikeSearch();
 
 private:
-	int roundEngineSize();
+	const int roundEngineSize() const;
 
 	int engineSize, noWheels;
 

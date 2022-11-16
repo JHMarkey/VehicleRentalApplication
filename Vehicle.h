@@ -5,6 +5,10 @@
 #include <sstream>
 #include <string>
 #include <algorithm>
+#include <list>
+#include <iomanip>
+#include <crtdbg.h>
+
 
 using namespace std;
 
@@ -19,18 +23,28 @@ public:
 
 	virtual void display();
 
-	virtual double getCostPerDay();
+	virtual const double getCostPerDay() const;
 
 	virtual void addVehicle();
 
 	virtual bool isNew();
+
+	virtual const void printDetails(int count, int cost) const;
 	
 	//virtual void removeVehicle();
 
-	//virtual void regSearch();
 	//virtual void costSearch();
 	
 protected:
+
+	template<typename T> const void printElement(T t, const int& width) const
+	{
+		cout << left << setw(width) << setfill(separator) << t;			//using templates to repeatedly format table printing
+	}
+
+	const char separator = ' ';
+	const int bigWidth = 23;
+	const int midWidth = 16;
 
 	int age;
 	string regNum, make, model, vehicleType;

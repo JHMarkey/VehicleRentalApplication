@@ -28,7 +28,7 @@ void Vehicle::addVehicle() {
 		{
 			vehicleFile << regNum << "," << getCostPerDay() << "," << vehicleType << "\n";
 			vehicleFile.close();
-			cout << "\Vehicle Successfully Added - " << regNum << "\n\n";
+			cout << "\nVehicle Successfully Added - " << regNum << "\n\n";
 		}
 		else cout << "\nUnable to Add Vehicle\n"
 				  << "<No File Error>\n\n";
@@ -37,7 +37,7 @@ void Vehicle::addVehicle() {
 			  << "<Not Unique Error>\n\n";
 }
 
-double Vehicle::getCostPerDay() {
+const double Vehicle::getCostPerDay() const {
 	return 1200;
 }
 
@@ -61,6 +61,14 @@ bool Vehicle::isNew() {
 	}
 	else return false;
 
+}
+
+void const Vehicle::printDetails(int count, int cost) const {
+	printElement(count, midWidth);
+	printElement(regNum, bigWidth);	
+	printElement(cost, midWidth);
+	printElement(vehicleType, midWidth);
+	cout << "\n\n";
 }
 
 
