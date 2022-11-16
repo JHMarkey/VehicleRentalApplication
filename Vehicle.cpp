@@ -1,6 +1,6 @@
 #include "Vehicle.h"
 
-string Vehicle::getRegNum() {
+const string Vehicle::getRegNum() const{
 	return regNum;
 }
 

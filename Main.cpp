@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iterator>
 #include <list>
+#include<vector>
 #include <iomanip>
 #include <crtdbg.h>
 #include "Vehicle.h"
@@ -28,6 +29,8 @@ void CostSortOption();
 void CarRegSearch();
 void CarSeatSearch();
 void CarDoorSearch();
+void BikeRegSearch();
+bool sortOnReg(const Vehicle* lhs, const Vehicle* rhs);
 
 const char separator = ' ';
 const int bigWidth = 23;
@@ -224,7 +227,7 @@ void BikeSearchOption() {
 			cin >> option;
 			switch (option)
 			{
-			case '1': break;
+			case '1': BikeRegSearch();  break;
 			case '2': break;
 			case '3': break;
 			case '4': break;
@@ -236,6 +239,70 @@ void BikeSearchOption() {
 void RegSortOption() {
 	cout << "\n\nSort By Registration Number\n"
 		<<"---------------------------\n\n";
+
+	string line;
+	vector<Vehicle*> vehicles;
+	int count = 1;
+
+	ifstream vehicleFile("VehicleList.txt");
+	if (vehicleFile.is_open())
+	{
+		while (getline(vehicleFile, line)) {		
+			string cRegNum;
+			int cost;
+			string vType;
+			int age;
+			int doors = 0;
+			int seats = 0;
+			int eSize = 0;
+			int wheels = 0;
+			string make;
+			string model;
+
+			replace(line.begin(), line.end(), ',', '\n');
+			stringstream ss(line);
+
+			ss >> cRegNum;
+			ss >> cost;
+			ss >> vType;
+			if (vType == "Car") {
+				ss >> doors;
+				ss >> seats;
+			}
+			else {
+				ss >> eSize;
+				ss >> wheels;
+			}			
+			ss >> age;
+			ss >> make;
+			ss >> model;
+
+			if (vType == "Car") {
+				Car* car = new Car(cRegNum, make, model, age, doors, seats);
+				vehicles.push_back(car);
+			}
+			else {
+				Bike* bike = new Bike(cRegNum, make, model, age, eSize, wheels);
+				vehicles.push_back(bike);
+			}
+
+			sort(vehicles.begin(), vehicles.end(), sortOnReg);
+			vector<Vehicle*>::iterator it(vehicles.begin());
+			int count = 1;
+			cout << "\n\n";
+			printTableHeaders();
+			while (it != vehicles.end()) {
+				(*it)->printDetails(count, (*it)->getCostPerDay());
+				it++; count++;
+			}
+		}
+		
+	}
+
+}
+
+bool sortOnReg(const Vehicle* lhs, const Vehicle* rhs) {
+	return lhs->getRegNum() < rhs->getRegNum();
 }
 
 void CostSortOption() {
@@ -335,7 +402,7 @@ void CarRegSearch() {
 	
 }
 
-void CarRegSearch() {
+void BikeRegSearch() {
 	string r;
 	do {
 		cout << "\n\nEnter Registration Number:";
@@ -384,7 +451,7 @@ void CarRegSearch() {
 			int count = 1;
 			cout << "\n\n";
 			printTableHeaders();
-			list<const Bike*>::iterator it(bikes.begin());
+			list<const Bike*>::iterator it(bikes.begin());					//Iterates through all of the vehicles that match the search criteria
 			while (it != bikes.end()) {
 				(*it)->printDetails(count, (*it)->getCostPerDay());
 				it++; count++;
