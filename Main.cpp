@@ -48,17 +48,17 @@ int main() {
 	_onexit(_CrtDumpMemoryLeaks);
 #endif
 
-	cout << "Vehicle Rental System\n";
-	cout << "---------------------\n\n";
-
-	printTableHeaders();
-	fillTable();
-	cout << "\n\n";
-
 	char option = ' ';
 
 	do {	
-		cout << "1) Add Vehicle\n"
+		cout << "Vehicle Rental System\n"
+			<< "---------------------\n\n";			
+
+		printTableHeaders();
+		fillTable();
+
+		cout << "\n\n"
+			<< "1) Add Vehicle\n"
 			<< "2) Remove Vehicle\n"
 			<< "3) Search For Car\n"
 			<< "4) Search For Bike\n"
@@ -865,7 +865,9 @@ const Car* SelectVehicle(list<const Car*> l) {
 		if (!(cin >> input))	throw - 1;
 		if (input > l.size())	throw - 1;
 
-		for (int i = 0; i < input; i++)	it++;
+		for (int i = 1; i < input; i++) {
+			(it++);
+		}
 
 		return *it;
 	}
