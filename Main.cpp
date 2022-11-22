@@ -26,11 +26,16 @@ void CarSearchOption();
 void BikeSearchOption();
 void RegSortOption();
 void CostSortOption();
-void CarRegSearch();
-void CarSeatSearch();
-void CarDoorSearch();
-void BikeRegSearch();
+const Car* CarRegSearch();
+const Car* CarSeatSearch();
+const Car* CarDoorSearch();
+const Bike* BikeRegSearch();
+const Bike* BikeWheelSearch();
+const Bike* BikeEngineSearch();
 bool sortOnReg(const Vehicle* lhs, const Vehicle* rhs);
+bool sortOnCost(const Vehicle* lhs, const Vehicle* rhs);
+const Bike* SelectVehicle(list<const Bike*> l);
+const Car* SelectVehicle(list<const Car*> l);
 
 const char separator = ' ';
 const int bigWidth = 23;
@@ -39,7 +44,7 @@ const int midWidth = 16;
 int main() {	
 
 #ifdef _DEBUG
-	//_CrtSetBreakAlloc(299);
+	//_CrtSetBreakAlloc(308);
 	_onexit(_CrtDumpMemoryLeaks);
 #endif
 
@@ -79,14 +84,14 @@ int main() {
 }
 
 void printTableHeaders() {
-	printElement("Vehicles Num", midWidth);	
+	printElement("#", 4);	
 	printElement("Registration Number", bigWidth);
 	printElement("Cost Per Day", midWidth);
 	printElement("Vehicle Type", midWidth);
 	
 	cout << endl;
 
-	printElement("------------", midWidth);
+	printElement("-", 4);
 	printElement("-------------------", bigWidth);
 	printElement("------------", midWidth);
 	printElement("------------", midWidth);
@@ -192,53 +197,56 @@ void RemoveVehicleOption() {
 }
 
 void CarSearchOption() {
-	cout << "\n\nCar Search\n"
-		<< "----------\n\n";
+	const Car* car;
 	char option = ' ';
-		do {
-			cout << "1) Registration Number\n"
-				<< "2) Number of Seats\n"
-				<< "3) Number of Doors\n"
-				<< "4) Return to Main Menu\n\n"
-				<< "Select Option: ";
-			cin >> option;
-			switch (option) 
-			{
-			case '1': CarRegSearch(); break;
-			case '2': CarSeatSearch(); break;
-			case '3': CarDoorSearch(); break;
-			case '4': break;
-			default: cout << "Invalid Input\n\n"; break;				
-			}
-		} while (option != '4');
+	do {
+		cout << "\n\nCar Search\n"
+			<< "----------\n\n";
+		cout << "1) Registration Number\n"
+			<< "2) Number of Seats\n"
+			<< "3) Number of Doors\n"
+			<< "4) Return to Main Menu\n\n"
+			<< "Select Option: ";
+		cin >> option;
+		switch (option)
+		{
+		case '1': car = CarRegSearch(); car->display(); break;
+		case '2': car = CarSeatSearch(); car->display(); break;
+		case '3': car = CarDoorSearch(); car->display(); break;
+		case '4': break;
+		default: cout << "Invalid Input\n\n"; break;
+		}
+
+	} while (option != '4');
 		
 }
 
 void BikeSearchOption() {
-	cout << "\n\nBike Search\n"
-		<< "-----------\n\n";
-		char option = ' ';
-		do {
-			cout << "1) Registration Number\n"
-				<< "2) Engine Size\n"
-				<< "3) Number of Wheels\n"
-				<< "4) Return to Main Menu\n\n"
-				<< "Select Option: ";
-			cin >> option;
-			switch (option)
-			{
-			case '1': BikeRegSearch();  break;
-			case '2': break;
-			case '3': break;
-			case '4': break;
-			default: cout << "Invalid Input\n\n"; break;
-			}
-		} while (option != '4');
+	const Bike* bike;
+	char option = ' ';
+	do {
+		cout << "\n\nBike Search\n"
+			<< "-----------\n\n";
+		cout << "1) Registration Number\n"
+			<< "2) Engine Size\n"
+			<< "3) Number of Wheels\n"
+			<< "4) Return to Main Menu\n\n"
+			<< "Select Option: ";
+		cin >> option;
+		switch (option)
+		{
+		case '1': bike = BikeRegSearch(); bike->display(); break;
+		case '2': bike = BikeEngineSearch(); bike->display(); break;
+		case '3': bike = BikeWheelSearch(); bike->display();  break;
+		case '4': break;
+		default: cout << "Invalid Input\n\n"; break;
+		}
+	} while (option != '4');
 }
 
 void RegSortOption() {
 	cout << "\n\nSort By Registration Number\n"
-		<<"---------------------------\n\n";
+		<<"---------------------------";
 
 	string line;
 	vector<Vehicle*> vehicles;
@@ -286,17 +294,90 @@ void RegSortOption() {
 				vehicles.push_back(bike);
 			}
 
-			sort(vehicles.begin(), vehicles.end(), sortOnReg);
-			vector<Vehicle*>::iterator it(vehicles.begin());
-			int count = 1;
-			cout << "\n\n";
-			printTableHeaders();
-			while (it != vehicles.end()) {
-				(*it)->printDetails(count, (*it)->getCostPerDay());
-				it++; count++;
-			}
 		}
+		sort(vehicles.begin(), vehicles.end(), sortOnReg);
+		vector<Vehicle*>::iterator it(vehicles.begin());
+		int count = 1;
+		cout << "\n\n";
+		printTableHeaders();
+		while (it != vehicles.end()) {
+			(*it)->printDetails(count, (*it)->getCostPerDay());
+			it++; count++;
+		}
+		cout << "\n\n";
 		
+	}
+
+}
+
+void CostSortOption() {
+	cout << "\n\nSort By Cost Per Day\n"
+		<< "--------------------";
+
+	string line;
+	Car* car = new Car("", "", "", 0, 0, 0);
+	Bike* bike = new Bike("", "", "", 0, 0, 0);
+	string vType;
+	vector<Vehicle*> vehicles;
+	int count = 1;
+
+	ifstream vehicleFile("VehicleList.txt");
+	if (vehicleFile.is_open())
+	{
+		while (getline(vehicleFile, line)) {
+			string cRegNum;
+			int cost;			
+			int age;
+			int doors = 0;
+			int seats = 0;
+			int eSize = 0;
+			int wheels = 0;
+			string make;
+			string model;
+
+			replace(line.begin(), line.end(), ',', '\n');
+			stringstream ss(line);
+
+			ss >> cRegNum;
+			ss >> cost;
+			ss >> vType;
+			if (vType == "Car") {
+				ss >> doors;
+				ss >> seats;
+			}
+			else {
+				ss >> eSize;
+				ss >> wheels;
+			}
+			ss >> age;
+			ss >> make;
+			ss >> model;
+
+			if (vType == "Car") {
+				car = new Car(cRegNum, make, model, age, doors, seats);
+				vehicles.push_back(car);
+			}
+			else {
+				bike = new Bike(cRegNum, make, model, age, eSize, wheels);
+				vehicles.push_back(bike);
+			}
+
+			
+		}
+		sort(vehicles.begin(), vehicles.end(), sortOnCost);
+		vector<Vehicle*>::iterator it(vehicles.begin());
+		int count = 1;
+		cout << "\n\n";
+		printTableHeaders();
+		while (it != vehicles.end()) {
+			(*it)->printDetails(count, (*it)->getCostPerDay());
+			it++; count++;
+		}
+
+		cout << "\n\n";
+
+		if (vType == "Car") delete(car);
+		else delete(bike);
 	}
 
 }
@@ -305,9 +386,8 @@ bool sortOnReg(const Vehicle* lhs, const Vehicle* rhs) {
 	return lhs->getRegNum() < rhs->getRegNum();
 }
 
-void CostSortOption() {
-	cout << "\n\nSort By Cost Per Day\n"
-		<< "--------------------\n\n";
+bool sortOnCost(const Vehicle* lhs, const Vehicle* rhs) {
+	return lhs->getCostPerDay() < rhs->getCostPerDay();
 }
 
 bool fillTable() {
@@ -330,7 +410,7 @@ bool fillTable() {
 			ss >> regNum;				//Assigning each element of the string stream to the correct Var ready for output.
 			ss >> cost;
 			ss >> VehType;
-			printElement(count, midWidth);
+			printElement(count, 4);
 			printElement(regNum, bigWidth);
 			printElement(cost, midWidth);
 			printElement(VehType, midWidth);	
@@ -342,7 +422,7 @@ bool fillTable() {
 	else return false;
 }
 
-void CarRegSearch() {
+const Car* CarRegSearch() {
 	string r;
 	do {
 		cout << "\n\nEnter Registration Number:";	
@@ -382,6 +462,7 @@ void CarRegSearch() {
 			if (cRegNum == r && vType == "Car") {
 				car = new Car(cRegNum, make, model, age, doors, seats);
 				cars.push_back(car);
+				
 			}
 		}
 		if (cars.empty()) {
@@ -396,13 +477,17 @@ void CarRegSearch() {
 				(*it)->printDetails(count, (*it)->getCostPerDay());
 				it++; count++;
 			}
+			cout << "\n\n";
+
+			return SelectVehicle(cars);
 		}
-		delete(car);
+		
 	}
-	
+	delete(car);
+	return nullptr;
 }
 
-void BikeRegSearch() {
+const Bike* BikeRegSearch() {
 	string r;
 	do {
 		cout << "\n\nEnter Registration Number:";
@@ -456,10 +541,11 @@ void BikeRegSearch() {
 				(*it)->printDetails(count, (*it)->getCostPerDay());
 				it++; count++;
 			}
+			return SelectVehicle(bikes);
 		}
-		delete(bike);
+		
 	}
-
+	return nullptr;
 }
 
 int getNoSeats() {
@@ -494,7 +580,7 @@ int getNoDoors() {
 	}
 }
 
-void CarSeatSearch() {
+const Car* CarSeatSearch() {
 	int noSeats = getNoSeats();
 
 	string line;
@@ -516,7 +602,6 @@ void CarSeatSearch() {
 			replace(line.begin(), line.end(), ',', '\n');
 			stringstream ss(line);
 			
-
 			ss >> cRegNum;
 			ss >> cost;
 			ss >> vType;
@@ -543,13 +628,16 @@ void CarSeatSearch() {
 				(*it)->printDetails(count, (*it)->getCostPerDay());
 				it++; count++;
 			}
+			cout << "\n\n";
+			return SelectVehicle(cars);
 		}
 
 	}
 	delete(car);
+	return nullptr;
 }
 
-void CarDoorSearch() {
+const Car* CarDoorSearch() {
 	int noSeats = getNoDoors();
 
 	string line;
@@ -599,6 +687,193 @@ void CarDoorSearch() {
 				it++; count++;
 			}			
 		}
+		cout << "\n\n";
+		return SelectVehicle(cars);
 	}
 	delete(car);
+	return nullptr;
+}
+
+const Bike* BikeWheelSearch() {
+	int w;
+	try {
+		cout << "Enter Number of Wheels(2 or 3):\n";
+		if (!(cin >> w))	throw - 1;
+		if (w > 3)	throw - 1;
+	}
+	catch (int) {
+		cerr << "\nInvalid Input\n"
+			<< "Default Value is 2.\n\n\n";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		w = 2;
+	}
+
+
+	string line;
+	const Bike* bike = new Bike("", "", "", 0, 0, 0);
+	list<const Bike*> bikes;
+
+	ifstream vehicleFile("VehicleList.txt");
+	if (vehicleFile.is_open()) {
+		while (getline(vehicleFile, line)) {
+
+			string cRegNum;
+			int cost;
+			string vType;
+			int age;
+			int eSize;
+			int wheels;
+			string make;
+			string model;
+
+			replace(line.begin(), line.end(), ',', '\n');
+			stringstream ss(line);
+
+			ss >> cRegNum;
+			ss >> cost;
+			ss >> vType;
+			ss >> eSize;
+			ss >> wheels;
+			ss >> age;
+			ss >> make;
+			ss >> model;
+
+			if (wheels == w && vType == "Bike") {
+				bike = new Bike(cRegNum, make, model, age, eSize, wheels);
+				bikes.push_back(bike);
+			}
+		}
+		if (bikes.empty()) {
+			cout << "\n\nNo Vehicle With This Number of Wheels Was Found.\n\n";
+		}
+		else {
+			int count = 1;
+			cout << "\n\n";
+			printTableHeaders();
+			list<const Bike*>::iterator it(bikes.begin());					//Iterates through all of the vehicles that match the search criteria
+			while (it != bikes.end()) {
+				(*it)->printDetails(count, (*it)->getCostPerDay());
+				it++; count++;
+			}
+			return SelectVehicle(bikes);
+		}
+
+	}
+	return nullptr;
+}
+
+const Bike* BikeEngineSearch() {
+	int e;
+	try {
+		cout << "Enter Engine Size:\n";
+		if (!(cin >> e))	throw - 1;
+		
+	}
+	catch (int) {
+		cerr << "\nInvalid Input\n"
+			<< "Default Value is 1000cc.\n\n\n";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		e = 1000;
+	}
+
+
+	string line;
+	const Bike* bike = new Bike("", "", "", 0, 0, 0);
+	list<const Bike*> bikes;
+
+	ifstream vehicleFile("VehicleList.txt");
+	if (vehicleFile.is_open()) {
+		while (getline(vehicleFile, line)) {
+
+			string cRegNum;
+			int cost;
+			string vType;
+			int age;
+			int eSize;
+			int wheels;
+			string make;
+			string model;
+
+			replace(line.begin(), line.end(), ',', '\n');
+			stringstream ss(line);
+
+			ss >> cRegNum;
+			ss >> cost;
+			ss >> vType;
+			ss >> eSize;
+			ss >> wheels;
+			ss >> age;
+			ss >> make;
+			ss >> model;
+
+			if (eSize == e && vType == "Bike") {
+				bike = new Bike(cRegNum, make, model, age, eSize, wheels);
+				bikes.push_back(bike);
+			}
+		}
+		if (bikes.empty()) {
+			cout << "\n\nNo Vehicle With This Engine Size Was Found.\n\n";
+		}
+		else {
+			int count = 1;
+			cout << "\n\n";
+			printTableHeaders();
+			list<const Bike*>::iterator it(bikes.begin());					//Iterates through all of the vehicles that match the search criteria
+			while (it != bikes.end()) {
+				(*it)->printDetails(count, (*it)->getCostPerDay());
+				it++; count++;
+			}
+			return SelectVehicle(bikes);
+		}
+
+	}
+	return nullptr;
+}
+
+
+
+
+
+const Bike* SelectVehicle(list<const Bike*> l) {
+	list<const Bike*>::iterator it(l.begin());
+	try {
+		int input;
+		cout << "Select Vehicle:\n";
+		if (!(cin >> input))	throw - 1;
+		if (input > l.size())	throw - 1;
+
+		for (int i = 0; i < input; i++)	it++;
+
+		return *it;
+	}
+	catch (int) {
+		cerr << "\nInvalid Input\n"
+			<< "Returning To Options. \n\n\n";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	}
+	return nullptr;
+}
+
+const Car* SelectVehicle(list<const Car*> l) {
+	list<const Car*>::iterator it(l.begin());
+	try {
+		int input;
+		cout << "Select Vehicle:\n";
+		if (!(cin >> input))	throw - 1;
+		if (input > l.size())	throw - 1;
+
+		for (int i = 0; i < input; i++)	it++;
+
+		return *it;
+	}
+	catch (int) {
+		cerr << "\nInvalid Input\n"
+			<< "Returning To Options. \n\n\n";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	}
+	return nullptr;
 }

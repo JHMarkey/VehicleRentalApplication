@@ -16,8 +16,32 @@ int Vehicle::getAge(){
 	return age;
 }
 
-void Vehicle::display() {
-	cout << regNum << "\t\t\t" << getCostPerDay() << "\t\t\t" << vehicleType << "\n";	
+void const Vehicle::display() const{
+	
+	printElement("Registration Number", bigWidth);
+	printElement("Cost Per Day", midWidth);
+	printElement("Vehicle Type", midWidth);
+	printElement("Vehicle Make", midWidth);
+	printElement("Vehicle Model", midWidth + 1);
+
+	cout << endl;
+
+	printElement("-------------------", bigWidth);
+	printElement("------------", midWidth);
+	printElement("------------", midWidth);
+	printElement("------------", midWidth);
+	printElement("-------------", midWidth + 1);
+
+	cout << endl << endl;
+
+	printElement(regNum, bigWidth);
+	printElement(getCostPerDay(), midWidth);
+	printElement(vehicleType, midWidth);
+	printElement(make, midWidth);
+	printElement(model, midWidth + 1);
+
+	cout << endl << endl;
+	
 }
 
 
@@ -63,12 +87,13 @@ bool Vehicle::isNew() {
 
 }
 
-void const Vehicle::printDetails(int count, int cost) const {
-	printElement(count, midWidth);
+void const Vehicle::printDetails(int count, double cost) const {
+	printElement(count, 4);
 	printElement(regNum, bigWidth);	
 	printElement(cost, midWidth);
 	printElement(vehicleType, midWidth);
-	cout << "\n\n";
+	cout << "\n";
 }
+
 
 

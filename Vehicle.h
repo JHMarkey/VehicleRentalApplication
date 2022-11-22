@@ -21,7 +21,7 @@ public:
 	virtual string getMake();
 	virtual int getAge();
 
-	virtual void display();
+	virtual const void display() const;
 
 	virtual const double getCostPerDay() const;
 
@@ -29,7 +29,7 @@ public:
 
 	virtual bool isNew();
 
-	virtual const void printDetails(int count, int cost) const;
+	virtual const void printDetails(int count, double cost) const;
 	
 	//virtual void removeVehicle();
 
