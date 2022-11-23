@@ -1,10 +1,16 @@
 #pragma once
+#include <iostream>
+#include <sstream>
+using namespace std;
+
 class RentalDate
 {
 public:
-	RentalDate(int d, int m, int y) : d(d), m(m), y(y) {};
+	RentalDate(int d, int m, int y);
 	RentalDate();
-	~RentalDate() {};
+	~RentalDate();
+	string GetDate();
+	
 private:
 	int d, m, y;
 };

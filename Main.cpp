@@ -11,6 +11,7 @@
 #include "Vehicle.h"
 #include "Car.h"
 #include "Bike.h"
+#include "Rental.h"
 
 
 using namespace std;
@@ -49,7 +50,7 @@ int main() {
 #endif
 
 	char option = ' ';
-
+	
 	do {	
 		cout << "Vehicle Rental System\n"
 			<< "---------------------\n\n";			
@@ -78,7 +79,6 @@ int main() {
 			default: cout << "Invalid Input\n\n"; break;
 		}
 	} while (option != '9');
-
 
 	return 0;
 }
@@ -307,7 +307,7 @@ void RegSortOption() {
 		cout << "\n\n";
 		
 	}
-
+	vehicleFile.close();
 }
 
 void CostSortOption() {
@@ -379,7 +379,7 @@ void CostSortOption() {
 		if (vType == "Car") delete(car);
 		else delete(bike);
 	}
-
+	vehicleFile.close();
 }
 
 bool sortOnReg(const Vehicle* lhs, const Vehicle* rhs) {
@@ -417,9 +417,12 @@ bool fillTable() {
 			cout << endl;
 			count++;
 		}
+		vehicleFile.close();
 		return true;
+	} else {
+		vehicleFile.close();	
+		return false;
 	}
-	else return false;
 }
 
 const Car* CarRegSearch() {
@@ -478,11 +481,12 @@ const Car* CarRegSearch() {
 				it++; count++;
 			}
 			cout << "\n\n";
-
+			vehicleFile.close();
 			return SelectVehicle(cars);
 		}
 		
 	}
+	vehicleFile.close();
 	delete(car);
 	return nullptr;
 }
@@ -541,10 +545,12 @@ const Bike* BikeRegSearch() {
 				(*it)->printDetails(count, (*it)->getCostPerDay());
 				it++; count++;
 			}
+			vehicleFile.close();
 			return SelectVehicle(bikes);
 		}
 		
 	}
+	vehicleFile.close();
 	return nullptr;
 }
 
@@ -629,6 +635,8 @@ const Car* CarSeatSearch() {
 				it++; count++;
 			}
 			cout << "\n\n";
+
+			vehicleFile.close();
 			return SelectVehicle(cars);
 		}
 
@@ -688,8 +696,10 @@ const Car* CarDoorSearch() {
 			}			
 		}
 		cout << "\n\n";
+		vehicleFile.close();
 		return SelectVehicle(cars);
 	}
+	vehicleFile.close();
 	delete(car);
 	return nullptr;
 }
@@ -756,10 +766,14 @@ const Bike* BikeWheelSearch() {
 				(*it)->printDetails(count, (*it)->getCostPerDay());
 				it++; count++;
 			}
+
+			vehicleFile.close();
 			return SelectVehicle(bikes);
 		}
 
 	}
+	delete(bike);
+	vehicleFile.close();
 	return nullptr;
 }
 
@@ -825,10 +839,14 @@ const Bike* BikeEngineSearch() {
 				(*it)->printDetails(count, (*it)->getCostPerDay());
 				it++; count++;
 			}
+
+			vehicleFile.close();
 			return SelectVehicle(bikes);
 		}
 
 	}
+	delete(bike);
+	vehicleFile.close();
 	return nullptr;
 }
 

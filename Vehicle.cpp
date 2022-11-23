@@ -53,6 +53,7 @@ void Vehicle::addVehicle() {
 			vehicleFile << regNum << "," << getCostPerDay() << "," << vehicleType << "\n";
 			vehicleFile.close();
 			cout << "\nVehicle Successfully Added - " << regNum << "\n\n";
+			vehicleFile.close();
 		}
 		else cout << "\nUnable to Add Vehicle\n"
 				  << "<No File Error>\n\n";
@@ -78,9 +79,10 @@ bool Vehicle::isNew() {
 			stringstream ss(line);
 
 			ss >> cRegNum;			
-
-			if (cRegNum == regNum) return false;	 //if the current line's RegNum is the same as the RegNum Trying to be added return false.
+			
+			if (cRegNum == regNum) vehicleFile.close(); return false;	 //if the current line's RegNum is the same as the RegNum Trying to be added return false.
 		}
+		vehicleFile.close();
 		return true;
 	}
 	else return false;

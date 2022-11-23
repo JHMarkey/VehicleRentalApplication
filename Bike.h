@@ -11,8 +11,6 @@ public:
 
 	virtual void addVehicle() override;
 
-	
-
 
 private:
 	const int roundEngineSize() const;

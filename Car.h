@@ -12,14 +12,9 @@ public:
 	virtual void addVehicle() override;
 
 	//void carSearch();
-
 	
-	
-
 private:
-
 	
-
 	int noDoors, noSeats;
 };
 
