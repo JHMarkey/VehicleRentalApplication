@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <string>
 #include "Vehicle.h"
 #include "RentalDate.h"
 
@@ -13,11 +14,11 @@ class Rental
 {
 
 public:	
-	Rental(Vehicle* vehicle);
+	Rental(const Vehicle* vehicle);
 	~Rental();
 
 	double CalcTotalCost();
-	int CalcNoDays();
+	const int CalcNoDays() const;
 	void CreateRentalFile();
 	void AddRentalDetails();
 	void DisplayRentalDetails();
@@ -25,16 +26,16 @@ public:
 	
 
 private:
-	Customer CreateCustomer();
-	RentalDate* CreateStartDate();
-	RentalDate* CreateEndDate();
+	const Customer CreateCustomer() const;
+	const RentalDate* CreateStartDate() const;
+	const RentalDate* CreateEndDate() const;
 	string CreateRentalLine(string t);
 
-	Vehicle* vehicle;
-	RentalDate* start;
-	RentalDate* end;
-	int noDays;	
-	Customer customer;
+	const Vehicle* vehicle;
+	const RentalDate* start;
+	const RentalDate* end;
+	const int noDays;	
+	const Customer customer;
 	const char separator = ' ';
 
 	template<typename T> const void printElement(T t, const int& width) const

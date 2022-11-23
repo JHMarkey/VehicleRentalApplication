@@ -1,12 +1,12 @@
 #include "Rental.h"
 
-Rental::Rental(Vehicle* vehicle) : vehicle(vehicle), noDays(CalcNoDays()), start(CreateStartDate()), end(CreateEndDate()), customer(CreateCustomer())  {}
+Rental::Rental(const Vehicle* vehicle) : vehicle(vehicle), customer(CreateCustomer()), start(CreateStartDate()), end(CreateEndDate()), noDays(CalcNoDays()) {}
 Rental::~Rental() {
 	delete(start);
 	delete(end);
 }
 
-Customer Rental::CreateCustomer() {
+const Customer Rental::CreateCustomer() const{
 	Customer c;
 	cout << "Enter Customer Details\n"
 		<< "----------------------\n\n";
@@ -20,29 +20,70 @@ Customer Rental::CreateCustomer() {
 	return c;
 }
 
-RentalDate* Rental::CreateStartDate() {
-	string date;
-;
-	cout << "Enter Start Date: (DD/MM/YY)\n";
-	getline(cin, date);
+const RentalDate* Rental::CreateStartDate() const {
+	string date = "";
+	do {		
+		try {
+			int d, m, y;
+			cout << "Enter Start Date: (DD/MM/YYYY)\n";
+			getline(cin, date);
+			if (date.length() != 10) throw - 1;
 
-	
+			replace(date.begin(), date.end(), '/', '\n');
+			stringstream ss(date);
+			ss >> d;
+			ss >> m;
+			ss >> y;
+			if (d > 31 || d < 1) throw - 1;
+			if (m > 12 || m < 1) throw - 1;
+			if (y > 2023 || y < 0) throw - 1;
+
+			return new RentalDate(d, m, y);
+		}
+		catch (int) {
+			cerr << "\nInvalid Date\n";
+			date = "";
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+	} while (date == "");
+	return nullptr;
 }
 
-RentalDate* Rental::CreateEndDate() {
-	string date;
+const RentalDate* Rental::CreateEndDate() const {
+	string date = "";
+	do {
+		try {
+			int d, m, y;
+			cout << "Enter End Date: (DD/MM/YYYY)\n";
+			getline(cin, date);
+			if (date.length() != 10) throw - 1;
 
-	cout << "Enter End Date: (DD/MM/YY)\n";
-	getline(cin, date);
-
-	
+			replace(date.begin(), date.end(), '/', '\n');
+			stringstream ss(date);
+			ss >> d; 
+			ss >> m;
+			ss >> y;
+			if (d > 31 || d < 1) throw - 1;
+			if (m > 12 || m < 1) throw - 1;
+			if (y > 2050 || y < 0) throw - 1;
+			return new RentalDate(d, m, y);
+		}
+		catch (int) {
+			cerr << "\nInvalid Date\n";
+			date = "";
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+	} while (date == "");
+	return nullptr;
 }
 
 double Rental::CalcTotalCost() {
 	return noDays * vehicle->getCostPerDay();
 }
 
-int Rental::CalcNoDays() {
+const int Rental::CalcNoDays() const {
 	return 5;
 }
 
@@ -61,7 +102,7 @@ void Rental::DisplayRentalDetails() {
 		<< CreateRentalLine(title) << "\n\n";
 
 	printElement("Rental:", 30);
-	printElement(1/1, 1);
+	printElement("1/1", 1);
 	cout << "\n";
 	printElement("Date From:", 30);
 	printElement(start->GetDate(), 1);

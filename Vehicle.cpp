@@ -4,11 +4,11 @@ const string Vehicle::getRegNum() const{
 	return regNum;
 }
 
-string Vehicle::getMake() {
+const string Vehicle::getMake() const{
 	return make;
 }
 
-string Vehicle::getModel() {
+const string Vehicle::getModel() const {
 	return model;
 }
 

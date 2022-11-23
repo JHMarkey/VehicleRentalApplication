@@ -6,10 +6,10 @@ using namespace std;
 class RentalDate
 {
 public:
-	RentalDate(int d, int m, int y);
+	RentalDate(const int d, const int m, const int y);
 	RentalDate();
 	~RentalDate();
-	string GetDate();
+	const string GetDate() const;
 	
 private:
 	int d, m, y;

@@ -17,8 +17,8 @@ class Vehicle
 public:
 
 	virtual const string getRegNum() const;
-	virtual string getModel();
-	virtual string getMake();
+	virtual const string getModel() const;
+	virtual const string getMake() const;
 	virtual int getAge();
 
 	virtual const void display() const;

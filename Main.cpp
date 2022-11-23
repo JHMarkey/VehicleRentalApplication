@@ -45,9 +45,14 @@ const int midWidth = 16;
 int main() {	
 
 #ifdef _DEBUG
-	//_CrtSetBreakAlloc(308);
+	//_CrtSetBreakAlloc(301);
 	_onexit(_CrtDumpMemoryLeaks);
 #endif
+
+	//Car* c = new Car("TY10KES", "Toyota", "Hilux", 12, 5, 5);
+	//Rental* r = new Rental(c);
+
+	//r->DisplayRentalDetails();
 
 	char option = ' ';
 	
@@ -81,6 +86,42 @@ int main() {
 	} while (option != '9');
 
 	return 0;
+}
+
+bool fillTable() {
+	string line;
+	int count = 1;
+
+	ifstream vehicleFile("VehicleList.txt");
+	if (vehicleFile.is_open())
+	{
+		while (getline(vehicleFile, line)) {		//Read Each line of file return true if there is a line.
+			string regNum;
+			int cost;
+			string VehType;
+
+
+			replace(line.begin(), line.end(), ',', '\n');		// Replaces Each ',' in the string with an new-line character so stringstream knows where to split.
+
+			stringstream ss(line);		//Using a string stream to split each element.
+
+			ss >> regNum;				//Assigning each element of the string stream to the correct Var ready for output.
+			ss >> cost;
+			ss >> VehType;
+			printElement(count, 4);
+			printElement(regNum, bigWidth);
+			printElement(cost, midWidth);
+			printElement(VehType, midWidth);
+			cout << endl;
+			count++;
+		}
+		vehicleFile.close();
+		return true;
+	}
+	else {
+		vehicleFile.close();
+		return false;
+	}
 }
 
 void printTableHeaders() {
@@ -210,15 +251,15 @@ void CarSearchOption() {
 		cin >> option;
 		switch (option)
 		{
-		case '1': car = CarRegSearch(); car->display(); break;
-		case '2': car = CarSeatSearch(); car->display(); break;
-		case '3': car = CarDoorSearch(); car->display(); break;
-		case '4': break;
+		case '1': car = CarRegSearch(); if (car != nullptr) car->display(); delete(car); break;				//Performs Requested Search, if the search is successful it displays details
+		case '2': car = CarSeatSearch(); if (car != nullptr) car->display(); delete(car); break;			//Related to the Selected Vehicle. It then deletes the Object and Returns to
+		case '3': car = CarDoorSearch(); if (car != nullptr) car->display(); delete(car); break;			//Car Search Menu.
+		case '4': break;	
 		default: cout << "Invalid Input\n\n"; break;
 		}
 
 	} while (option != '4');
-		
+
 }
 
 void BikeSearchOption() {
@@ -235,13 +276,14 @@ void BikeSearchOption() {
 		cin >> option;
 		switch (option)
 		{
-		case '1': bike = BikeRegSearch(); bike->display(); break;
-		case '2': bike = BikeEngineSearch(); bike->display(); break;
-		case '3': bike = BikeWheelSearch(); bike->display();  break;
+		case '1': bike = BikeRegSearch(); if(bike != nullptr) bike->display(); delete(bike); break;
+		case '2': bike = BikeEngineSearch(); if (bike != nullptr) bike->display(); delete(bike); break;
+		case '3': bike = BikeWheelSearch(); if (bike != nullptr) bike->display(); delete(bike);  break;
 		case '4': break;
 		default: cout << "Invalid Input\n\n"; break;
 		}
 	} while (option != '4');
+	
 }
 
 void RegSortOption() {
@@ -295,14 +337,15 @@ void RegSortOption() {
 			}
 
 		}
-		sort(vehicles.begin(), vehicles.end(), sortOnReg);
+		sort(vehicles.begin(), vehicles.end(), sortOnReg);						// Sorts Vehicles using their regnum is alphabetical order.
 		vector<Vehicle*>::iterator it(vehicles.begin());
 		int count = 1;
 		cout << "\n\n";
 		printTableHeaders();
 		while (it != vehicles.end()) {
-			(*it)->printDetails(count, (*it)->getCostPerDay());
-			it++; count++;
+			(*it)->printDetails(count, (*it)->getCostPerDay());					// Iterates through all vehicles and prints details.
+			delete(*it);														// Deletes object after details have been printed.
+			it++; count++;														// Iterator Increments onto next Vehicle and Vehicle Number also increments.
 		}
 		cout << "\n\n";
 		
@@ -383,47 +426,14 @@ void CostSortOption() {
 }
 
 bool sortOnReg(const Vehicle* lhs, const Vehicle* rhs) {
-	return lhs->getRegNum() < rhs->getRegNum();
+	return lhs->getRegNum() < rhs->getRegNum();								//Uses operator overloading to compare the strings.
 }
 
 bool sortOnCost(const Vehicle* lhs, const Vehicle* rhs) {
-	return lhs->getCostPerDay() < rhs->getCostPerDay();
+	return lhs->getCostPerDay() < rhs->getCostPerDay();						//Uses operator's standard operation to compare numbers (Doubles).
 }
 
-bool fillTable() {
-	string line;
-	int count = 1;
-	
-	ifstream vehicleFile("VehicleList.txt");
-	if (vehicleFile.is_open())
-	{	
-		while (getline(vehicleFile, line)) {		//Read Each line of file return true if there is a line.
-			string regNum;
-			int cost;
-			string VehType;			
-			
 
-			replace(line.begin(), line.end(), ',', '\n');		// Set the start and end of each element of the line.
-
-			stringstream ss(line);		//Using a string stream to split each element.
-
-			ss >> regNum;				//Assigning each element of the string stream to the correct Var ready for output.
-			ss >> cost;
-			ss >> VehType;
-			printElement(count, 4);
-			printElement(regNum, bigWidth);
-			printElement(cost, midWidth);
-			printElement(VehType, midWidth);	
-			cout << endl;
-			count++;
-		}
-		vehicleFile.close();
-		return true;
-	} else {
-		vehicleFile.close();	
-		return false;
-	}
-}
 
 const Car* CarRegSearch() {
 	string r;
@@ -434,7 +444,7 @@ const Car* CarRegSearch() {
 	
 
 	string line;
-	const Car* car = new Car("", "", "", 0, 0, 0);
+	const Car* car;
 	list<const Car*> cars;
 
 	ifstream vehicleFile("VehicleList.txt");
@@ -464,8 +474,7 @@ const Car* CarRegSearch() {
 
 			if (cRegNum == r && vType == "Car") {
 				car = new Car(cRegNum, make, model, age, doors, seats);
-				cars.push_back(car);
-				
+				cars.push_back(car);				
 			}
 		}
 		if (cars.empty()) {
@@ -487,7 +496,6 @@ const Car* CarRegSearch() {
 		
 	}
 	vehicleFile.close();
-	delete(car);
 	return nullptr;
 }
 
@@ -641,7 +649,7 @@ const Car* CarSeatSearch() {
 		}
 
 	}
-	delete(car);
+	vehicleFile.close();
 	return nullptr;
 }
 
@@ -649,7 +657,7 @@ const Car* CarDoorSearch() {
 	int noSeats = getNoDoors();
 
 	string line;
-	const Car* car = new Car("", "", "", 0, 0 , 0);
+	const Car* car;
 	list<const Car*> cars;
 
 	ifstream vehicleFile("VehicleList.txt");
@@ -700,7 +708,6 @@ const Car* CarDoorSearch() {
 		return SelectVehicle(cars);
 	}
 	vehicleFile.close();
-	delete(car);
 	return nullptr;
 }
 
@@ -721,7 +728,7 @@ const Bike* BikeWheelSearch() {
 
 
 	string line;
-	const Bike* bike = new Bike("", "", "", 0, 0, 0);
+	const Bike* bike;
 	list<const Bike*> bikes;
 
 	ifstream vehicleFile("VehicleList.txt");
@@ -772,7 +779,6 @@ const Bike* BikeWheelSearch() {
 		}
 
 	}
-	delete(bike);
 	vehicleFile.close();
 	return nullptr;
 }
@@ -794,7 +800,7 @@ const Bike* BikeEngineSearch() {
 
 
 	string line;
-	const Bike* bike = new Bike("", "", "", 0, 0, 0);
+	const Bike* bike;
 	list<const Bike*> bikes;
 
 	ifstream vehicleFile("VehicleList.txt");
@@ -845,7 +851,7 @@ const Bike* BikeEngineSearch() {
 		}
 
 	}
-	delete(bike);
+	
 	vehicleFile.close();
 	return nullptr;
 }
@@ -862,8 +868,10 @@ const Bike* SelectVehicle(list<const Bike*> l) {
 		if (!(cin >> input))	throw - 1;
 		if (input > l.size())	throw - 1;
 
-		for (int i = 0; i < input; i++)	it++;
-
+		for (int i = 0; i < input; i++) {
+			delete(*it);
+			(it++);
+		}
 		return *it;
 	}
 	catch (int) {
@@ -884,6 +892,7 @@ const Car* SelectVehicle(list<const Car*> l) {
 		if (input > l.size())	throw - 1;
 
 		for (int i = 1; i < input; i++) {
+			delete(*it);
 			(it++);
 		}
 

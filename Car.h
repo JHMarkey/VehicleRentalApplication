@@ -4,7 +4,7 @@ class Car : public Vehicle
 {
 public:
 
-	Car(string regNum, string make, string model, int age, int noDoors, int noSeats);
+	Car(const string regNum, const string make, const string model, const int age, const int noDoors, const int noSeats);
 	~Car();
 
 	virtual const double getCostPerDay() const override;
