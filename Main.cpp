@@ -37,6 +37,7 @@ bool sortOnReg(const Vehicle* lhs, const Vehicle* rhs);
 bool sortOnCost(const Vehicle* lhs, const Vehicle* rhs);
 const Bike* SelectVehicle(list<const Bike*> l);
 const Car* SelectVehicle(list<const Car*> l);
+void DisplayRentalOptions();
 
 const char separator = ' ';
 const int bigWidth = 23;
@@ -103,7 +104,7 @@ bool fillTable() {
 
 			replace(line.begin(), line.end(), ',', '\n');		// Replaces Each ',' in the string with an new-line character so stringstream knows where to split.
 
-			stringstream ss(line);		//Using a string stream to split each element.
+			stringstream ss(line);		//Using a string stream to split each element on the new-line character.
 
 			ss >> regNum;				//Assigning each element of the string stream to the correct Var ready for output.
 			ss >> cost;
@@ -905,4 +906,12 @@ const Car* SelectVehicle(list<const Car*> l) {
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	}
 	return nullptr;
+}
+
+void DisplayRentalOptions() {
+	cout << "\n\n"
+		<< "1) Rent Vehicle\n"
+		<< "2) View Rental History\n"
+		<< "9) Return to Main Menu\n\n"
+		<< "Please choose an option:\n";
 }
