@@ -23,13 +23,14 @@ public:
 	void AddRentalDetails();
 	void DisplayRentalDetails();
 	
-	
 
 private:
 	const Customer CreateCustomer() const;
 	const RentalDate* CreateStartDate() const;
 	const RentalDate* CreateEndDate() const;
-	string CreateRentalLine(string t);
+	string CreateRentalLine(const string& t);
+
+	const int GetNoRentals() const;
 
 	const Vehicle* vehicle;
 	const RentalDate* start;

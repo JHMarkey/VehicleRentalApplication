@@ -1,4 +1,5 @@
 #include "Car.h"
+#include "Rental.h"
 
 Car::Car(const string regNum, const string make, const string model, const int age, const int noDoors, const int noSeats) : noDoors(noDoors), noSeats(noSeats) {
 	this->regNum = regNum;

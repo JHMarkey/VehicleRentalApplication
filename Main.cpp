@@ -37,7 +37,7 @@ bool sortOnReg(const Vehicle* lhs, const Vehicle* rhs);
 bool sortOnCost(const Vehicle* lhs, const Vehicle* rhs);
 const Bike* SelectVehicle(list<const Bike*> l);
 const Car* SelectVehicle(list<const Car*> l);
-void DisplayRentalOptions();
+char DisplayRentalOptions(const Vehicle* v);
 
 const char separator = ' ';
 const int bigWidth = 23;
@@ -48,15 +48,9 @@ int main() {
 #ifdef _DEBUG
 	//_CrtSetBreakAlloc(301);
 	_onexit(_CrtDumpMemoryLeaks);
-#endif
+#endif	
 
-	Car* c = new Car("TY10KES", "Toyota", "Hilux", 12, 5, 5);
-	Rental* r = new Rental(c);
-
-	r->DisplayRentalDetails();
-	
-
-	/*char option = ' ';
+	char option = ' ';
 	
 	do {	
 		cout << "Vehicle Rental System\n"
@@ -85,7 +79,7 @@ int main() {
 			case '9': break;
 			default: cout << "Invalid Input\n\n"; break;
 		}
-	} while (option != '9');*/
+	} while (option != '9');
 
 	return 0;
 }
@@ -253,9 +247,9 @@ void CarSearchOption() {
 		cin >> option;
 		switch (option)
 		{
-		case '1': car = CarRegSearch(); if (car != nullptr) car->display(); delete(car); break;				//Performs Requested Search, if the search is successful it displays details
-		case '2': car = CarSeatSearch(); if (car != nullptr) car->display(); delete(car); break;			//Related to the Selected Vehicle. It then deletes the Object and Returns to
-		case '3': car = CarDoorSearch(); if (car != nullptr) car->display(); delete(car); break;			//Car Search Menu.
+		case '1': car = CarRegSearch(); if (car != nullptr) car->display(); option = DisplayRentalOptions(car); delete(car); break;				//Performs Requested Search, if the search is successful it displays details
+		case '2': car = CarSeatSearch(); if (car != nullptr) car->display(); option = DisplayRentalOptions(car); delete(car); break;			//Related to the Selected Vehicle. It then deletes the Object and Returns to
+		case '3': car = CarDoorSearch(); if (car != nullptr) car->display(); option = DisplayRentalOptions(car); delete(car); break;			//Car Search Menu.
 		case '4': break;	
 		default: cout << "Invalid Input\n\n"; break;
 		}
@@ -278,14 +272,50 @@ void BikeSearchOption() {
 		cin >> option;
 		switch (option)
 		{
-		case '1': bike = BikeRegSearch(); if(bike != nullptr) bike->display(); delete(bike); break;
-		case '2': bike = BikeEngineSearch(); if (bike != nullptr) bike->display(); delete(bike); break;
-		case '3': bike = BikeWheelSearch(); if (bike != nullptr) bike->display(); delete(bike);  break;
+		case '1': bike = BikeRegSearch(); if(bike != nullptr) bike->display(); option = DisplayRentalOptions(bike); delete(bike); break;
+		case '2': bike = BikeEngineSearch(); if (bike != nullptr) bike->display(); option = DisplayRentalOptions(bike); delete(bike); break;
+		case '3': bike = BikeWheelSearch(); if (bike != nullptr) bike->display(); option = DisplayRentalOptions(bike); delete(bike);  break;
 		case '4': break;
 		default: cout << "Invalid Input\n\n"; break;
 		}
+
+		
+		
+
 	} while (option != '4');
 	
+}
+
+bool FileExists(const string& name) {
+	ifstream f(name.c_str());
+	return f.good();
+}
+
+char DisplayRentalOptions(const Vehicle* v) {
+
+	char option = ' ';
+	do {
+		cout << "\n\n"
+			<< "1) Rent Vehicle\n"
+			<< "2) View Rental History\n"
+			<< "9) Return to Main Menu\n\n"
+			<< "Please choose an option:\n";
+		cin >> option;
+
+		
+		if (option == '1') {
+			Rental* r = new Rental(v);
+			if (!FileExists(v->getRegNum() + ".txt")) r->CreateRentalFile();
+			r->AddRentalDetails();
+			delete(r);
+		}
+		else if (option == '2') {
+			cout << "Rental History";
+		}
+		else if (option != '9') cout << "Invalid Input.";	
+
+	} while (option != '9');
+	return option;
 }
 
 void RegSortOption() {
@@ -909,10 +939,3 @@ const Car* SelectVehicle(list<const Car*> l) {
 	return nullptr;
 }
 
-void DisplayRentalOptions() {
-	cout << "\n\n"
-		<< "1) Rent Vehicle\n"
-		<< "2) View Rental History\n"
-		<< "9) Return to Main Menu\n\n"
-		<< "Please choose an option:\n";
-}

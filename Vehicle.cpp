@@ -51,7 +51,7 @@ void Vehicle::addVehicle() {
 		if (vehicleFile.is_open())
 		{
 			vehicleFile << regNum << "," << getCostPerDay() << "," << vehicleType << "\n";
-			vehicleFile.close();
+
 			cout << "\nVehicle Successfully Added - " << regNum << "\n\n";
 			vehicleFile.close();
 		}
@@ -72,7 +72,7 @@ bool Vehicle::isNew() {
 	ifstream vehicleFile("VehicleList.txt");
 	if (vehicleFile.is_open())
 	{
-		while (getline(vehicleFile, line, ',')) {		//iterates through all of the reg numbers in the "VehicleList.txt" file.
+		while (getline(vehicleFile, line)) {		//iterates through all of the reg numbers in the "VehicleList.txt" file.
 			string cRegNum;
 
 			replace(line.begin(), line.end(), ',', '\n');
@@ -80,7 +80,7 @@ bool Vehicle::isNew() {
 
 			ss >> cRegNum;			
 			
-			if (cRegNum == regNum) vehicleFile.close(); return false;	 //if the current line's RegNum is the same as the RegNum Trying to be added return false.
+			if (cRegNum == regNum) { vehicleFile.close(); return false; }	 //if the current line's RegNum is the same as the RegNum Trying to be added return false.
 		}
 		vehicleFile.close();
 		return true;

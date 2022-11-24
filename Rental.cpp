@@ -88,16 +88,25 @@ const int Rental::CalcNoDays() const {
 }
 
 void Rental::CreateRentalFile() {
-	ofstream rFile(vehicle->getRegNum());
+	ofstream rFile(vehicle->getRegNum() + ".txt");
 	rFile.close();
 }
 
 void Rental::AddRentalDetails() {
-
+	ofstream rFile(vehicle->getRegNum() + ".txt");
+	if (rFile.is_open())
+	{
+		rFile << start->GetDate() << "," << end->GetDate() << "," << noDays << "," << customer.name << "," << customer.address << "," << customer.teleN << "\n";
+		cout << "\n\n Rental Successfully Added.\n\n";
+		rFile.close();
+	}
+	else cout << "\nUnable to Add Rental\n"
+			<< "<No File Error>\n\n";
 }
 
 void Rental::DisplayRentalDetails() {
 	string title = vehicle->getRegNum() + ": " + vehicle->getMake() + " " + vehicle->getModel() + " Rental History";
+	
 	cout <<  "\n\n" << title << "\n"
 		<< CreateRentalLine(title) << "\n\n";
 
@@ -129,10 +138,24 @@ void Rental::DisplayRentalDetails() {
 
 }
 
-string Rental::CreateRentalLine(string t) {
+string Rental::CreateRentalLine(const string& t) {
 	string line = "";
 	for (int i = 0; i < t.length(); i++) {
 		line += "-";
 	}
 	return line;
+}
+
+const int Rental::GetNoRentals() const {
+	int count = 0;
+	string line;
+
+	ifstream rFile(vehicle->getRegNum()  + ".txt");
+
+	if (rFile.is_open()) {
+		while (getline(rFile, line)) {
+			count++;
+		}
+	}
+	return count;
 }
