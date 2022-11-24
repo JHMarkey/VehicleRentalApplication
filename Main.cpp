@@ -50,12 +50,13 @@ int main() {
 	_onexit(_CrtDumpMemoryLeaks);
 #endif
 
-	//Car* c = new Car("TY10KES", "Toyota", "Hilux", 12, 5, 5);
-	//Rental* r = new Rental(c);
+	Car* c = new Car("TY10KES", "Toyota", "Hilux", 12, 5, 5);
+	Rental* r = new Rental(c);
 
-	//r->DisplayRentalDetails();
+	r->DisplayRentalDetails();
+	
 
-	char option = ' ';
+	/*char option = ' ';
 	
 	do {	
 		cout << "Vehicle Rental System\n"
@@ -84,7 +85,7 @@ int main() {
 			case '9': break;
 			default: cout << "Invalid Input\n\n"; break;
 		}
-	} while (option != '9');
+	} while (option != '9');*/
 
 	return 0;
 }

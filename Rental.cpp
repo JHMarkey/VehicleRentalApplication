@@ -80,11 +80,11 @@ const RentalDate* Rental::CreateEndDate() const {
 }
 
 double Rental::CalcTotalCost() {
-	return noDays * vehicle->getCostPerDay();
+	return (noDays * vehicle->getCostPerDay()) / 100;
 }
 
 const int Rental::CalcNoDays() const {
-	return 5;
+	return end->CalcDiff(start);
 }
 
 void Rental::CreateRentalFile() {
@@ -114,6 +114,7 @@ void Rental::DisplayRentalDetails() {
 	printElement(noDays, 1);
 	cout << "\n";
 	printElement("Total Cost:", 30);
+	cout << '£';
 	printElement(CalcTotalCost(), 1);
 	cout << "\n";
 	printElement("Customer Name:", 30);
