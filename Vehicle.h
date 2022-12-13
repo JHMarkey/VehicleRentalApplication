@@ -24,6 +24,7 @@ public:
 	virtual const void display() const;
 
 	virtual const double getCostPerDay() const;
+	virtual const string getVehType() const;
 
 	virtual void addVehicle();
 

@@ -15,22 +15,23 @@ class Rental
 
 public:	
 	Rental(const Vehicle* vehicle);
+	Rental(const Vehicle* vehicle, const string& name, const string& address, const string& teleN, const RentalDate* start, const RentalDate* end, const int noDays);
 	~Rental();
 
-	double CalcTotalCost();
-	const int CalcNoDays() const;
+	const double CalcTotalCost() const;
+	const int CalcNoDays() const;	
 	void CreateRentalFile();
 	void AddRentalDetails();
-	void DisplayRentalDetails();
-	
+	const void DisplayRentalDetails(int count) const;
+	const int GetNoRentals() const;
 
 private:
 	const Customer CreateCustomer() const;
+	const Customer CreateCustomer(const string& name, const string& address, const string& teleN) const;
 	const RentalDate* CreateStartDate() const;
-	const RentalDate* CreateEndDate() const;
-	string CreateRentalLine(const string& t);
-
-	const int GetNoRentals() const;
+	const RentalDate* CreateEndDate(const RentalDate* start) const;
+	const string CreateRentalLine(const string& t) const;
+	
 
 	const Vehicle* vehicle;
 	const RentalDate* start;

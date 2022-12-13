@@ -1,7 +1,12 @@
 #include "Vehicle.h"
 
 const string Vehicle::getRegNum() const{
-	return regNum;
+	char* c;
+	string s(regNum);
+	c = &s[0];
+	for (int i = 0; i < sizeof(c); i++) c[i] = toupper(c[i]);
+
+	return c;
 }
 
 const string Vehicle::getMake() const{
@@ -46,24 +51,25 @@ void const Vehicle::display() const{
 
 
 void Vehicle::addVehicle() {
-	if (this->isNew()) {
-		ofstream vehicleFile("VehicleList.txt");
-		if (vehicleFile.is_open())
-		{
-			vehicleFile << regNum << "," << getCostPerDay() << "," << vehicleType << "\n";
+	ofstream vehicleFile("VehicleList.txt");
+	if (vehicleFile.is_open())
+	{
+		vehicleFile << regNum << "," << getCostPerDay() << "," << vehicleType << "\n";
 
-			cout << "\nVehicle Successfully Added - " << regNum << "\n\n";
-			vehicleFile.close();
-		}
-		else cout << "\nUnable to Add Vehicle\n"
-				  << "<No File Error>\n\n";
-	}	
+		cout << "\nVehicle Successfully Added - " << regNum << "\n\n";
+		vehicleFile.close();
+	}
 	else cout << "\nUnable to Add Vehicle\n"
-			  << "<Not Unique Error>\n\n";
-}
+		<< "<No File Error>\n\n";
+}	
 
 const double Vehicle::getCostPerDay() const {
 	return 1200;
+}
+
+const string Vehicle::getVehType() const
+{
+	return vehicleType;
 }
 
 bool Vehicle::isNew() {
@@ -90,9 +96,17 @@ bool Vehicle::isNew() {
 }
 
 void const Vehicle::printDetails(int count, double cost) const {
+	char* c;
+	string s(regNum);
+	c = &s[0];
+	for (int i = 0; i < sizeof(c); i++) c[i] = toupper(c[i]);
+
+	stringstream ss;
+	ss << fixed << setprecision(2) << cost / 100;
+	string costStr = '$' + ss.str();
 	printElement(count, 4);
-	printElement(regNum, bigWidth);	
-	printElement(cost, midWidth);
+	printElement(c, bigWidth);	
+	printElement(costStr, midWidth);
 	printElement(vehicleType, midWidth);
 	cout << "\n";
 }

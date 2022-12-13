@@ -23,20 +23,16 @@ const int Bike::roundEngineSize() const {
 }
 
 void Bike::addVehicle() {
-	if (this->isNew()) {
-		ofstream vehicleFile("VehicleList.txt",ios::app);
-		if (vehicleFile.is_open())
-		{
-			vehicleFile << regNum << "," << getCostPerDay() << "," << vehicleType << "," << engineSize << "," << noWheels << "," << age << "," << make << "," << model << "\n";
-			vehicleFile.close();
-			cout << "\nVehicle Successfully Added - " << regNum << "\n\n";
-		}
-		else cout << "Unable to Add Vehicle"
-				  << "<No File Error>\n\n";
-	}
-	else cout << "\nUnable to Add Vehicle\n"
-			  << "<Unable to Verify Error>\n\n";
 
+	ofstream vehicleFile("VehicleList.txt", ios::app);
+	if (vehicleFile.is_open())
+	{
+		vehicleFile << regNum << "," << getCostPerDay() << "," << vehicleType << "," << engineSize << "," << noWheels << "," << age << "," << make << "," << model << "\n";
+		vehicleFile.close();
+		cout << "\nVehicle Successfully Added - " << regNum << "\n\n";
+	}
+	else cout << "Unable to Add Vehicle"
+		<< "<No File Error>\n\n";
 }
 
 
