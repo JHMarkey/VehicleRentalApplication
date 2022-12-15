@@ -124,7 +124,7 @@ const void Rental::DisplayRentalDetails(int count) const {
 
 	char c = '0';
 	int no = 0;
-	no = GetNoRentals();
+	no = vehicle->GetNoRentals();
 	c = '0';
 	string title = vehicle->getRegNum() + ": " + vehicle->getMake() + " " + vehicle->getModel() + " Rental History";
 
@@ -167,7 +167,7 @@ const void Rental::DisplayRentalDetails(int count) const {
 
 }
 
-const string Rental::CreateRentalLine(const string& t) const {
+const string Rental::CreateRentalLine(const string& t) {
 	string line = "";
 	for (int i = 0; i < t.length(); i++) {
 		line += "-";
@@ -175,14 +175,5 @@ const string Rental::CreateRentalLine(const string& t) const {
 	return line;
 }
 
-const int Rental::GetNoRentals() const {
-	int count = 0;
-	string line;
-	ifstream rFile(vehicle->getRegNum() + ".txt");
 
-	while (getline(rFile, line)) {
-		count++;
-	}
-	return count;
-}
 

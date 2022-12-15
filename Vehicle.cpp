@@ -21,35 +21,6 @@ int Vehicle::getAge(){
 	return age;
 }
 
-void const Vehicle::display() const{
-	
-	printElement("Registration Number", bigWidth);
-	printElement("Cost Per Day", midWidth);
-	printElement("Vehicle Type", midWidth);
-	printElement("Vehicle Make", midWidth);
-	printElement("Vehicle Model", midWidth + 1);
-
-	cout << endl;
-
-	printElement("-------------------", bigWidth);
-	printElement("------------", midWidth);
-	printElement("------------", midWidth);
-	printElement("------------", midWidth);
-	printElement("-------------", midWidth + 1);
-
-	cout << endl << endl;
-
-	printElement(regNum, bigWidth);
-	printElement(getCostPerDay(), midWidth);
-	printElement(vehicleType, midWidth);
-	printElement(make, midWidth);
-	printElement(model, midWidth + 1);
-
-	cout << endl << endl;
-	
-}
-
-
 void Vehicle::addVehicle() {
 	ofstream vehicleFile("VehicleList.txt");
 	if (vehicleFile.is_open())
@@ -111,5 +82,16 @@ void const Vehicle::printDetails(int count, double cost) const {
 	cout << "\n";
 }
 
+const int Vehicle::GetNoRentals() const {
+	int count = 0;
+	string line;
+	string fName = getRegNum() + ".txt";
+	ifstream rFile(fName);
+
+	while (getline(rFile, line)) {
+		count++;
+	}
+	return count;
+}
 
 

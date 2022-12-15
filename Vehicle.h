@@ -21,8 +21,6 @@ public:
 	virtual const string getMake() const;
 	virtual int getAge();
 
-	virtual const void display() const;
-
 	virtual const double getCostPerDay() const;
 	virtual const string getVehType() const;
 
@@ -31,6 +29,8 @@ public:
 	virtual bool isNew();
 
 	virtual const void printDetails(int count, double cost) const;
+
+	const int GetNoRentals() const;
 	
 	//virtual void removeVehicle();
 

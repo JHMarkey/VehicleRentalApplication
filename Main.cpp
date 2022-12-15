@@ -19,10 +19,8 @@ using namespace std;
 
 template<typename T> void printElement(T t, const int& width);
 void printTableHeaders();
-
 bool fillTable();
 bool fillTable(vector<Vehicle*>);
-
 vector<Vehicle*> AddVehicleOption(vector<Vehicle*>& vehicles);
 vector<Vehicle*> RemoveVehicleOption(vector<Vehicle*>& vehicles);
 void CarSearchOption();
@@ -41,7 +39,9 @@ bool sortOnCost(const Vehicle* lhs, const Vehicle* rhs);
 const Bike* SelectVehicle(list<const Bike*> l);
 const Car* SelectVehicle(list<const Car*> l);
 char DisplayRentalOptions(const Vehicle* v);
-list<const Rental*> GetRentals(const Vehicle* v);
+Rental* GetRentals(const Vehicle* v, int& count);
+const void display(const Vehicle* v);
+Rental* GetRentals(const Vehicle* v, int& count);
 
 const char separator = ' ';
 const int bigWidth = 23;
@@ -50,7 +50,7 @@ const int midWidth = 16;
 int main() {	
 
 #ifdef _DEBUG
-	//_CrtSetBreakAlloc(650);
+	//_CrtSetBreakAlloc(762);
 	_onexit(_CrtDumpMemoryLeaks);
 #endif	
 
@@ -129,7 +129,7 @@ bool fillTable() {
 			ss >> cost;
 			ss >> VehType;
 
-			char* c;
+			char* c;							// Converts string to character array and then converts each character to upper case
 			string s(regNum);
 			c = &s[0];
 			for (int i = 0; i < sizeof(c); i++) c[i] = toupper(c[i]);
@@ -250,63 +250,88 @@ Car* AddCar() {
 
 	cout << "\n\nCreating Car\n"
 		 << "------------\n\n";
+	try {
+		string regNum;
+		cout << "Enter Registration Number:\n";
+		cin >> regNum;
+		string make;
+		cout << "\nEnter Vehicle's Make:\n";
+		cin >> make;
+		string model;
+		cout << "\nEnter Vehicle's Model:\n";
+		cin >> model;
+		int age;
+		cout << "\nEnter Vehicle's Age:\n";
+		if (!(cin >> age))	throw - 1;
+		else if (age < 0) throw - 1;
+		int noDoors;
+		cout << "\nEnter Number of Doors:\n";
+		if (!(cin >> noDoors))	throw - 1;
+		else if (noDoors < 0) throw - 1;
+		int noSeats;
+		cout << "\nEnter Number of Seats:\n";
+		if (!(cin >> noSeats))	throw - 1;
+		else if (noSeats < 0) throw - 1;
 
-	string regNum;
-	cout << "Enter Registration Number:\n";
-	cin >> regNum;
-	string make;
-	cout << "\nEnter Vehicle's Make:\n";
-	cin >> make;
-	string model;
-	cout << "\nEnter Vehicle's Model:\n";
-	cin >> model;	
-	int age;
-	cout << "\nEnter Vehicle's Age:\n";
-	if (!(cin >> age))	throw - 1;
-	int noDoors;
-	cout << "\nEnter Number of Doors:\n";
-	if (!(cin >> noDoors))	throw - 1;
-	int noSeats;
-	cout << "\nEnter Number of Seats:\n";
-	if (!(cin >> noSeats))	throw - 1;
 
-	Car* c = new Car(regNum, make, model, age, noDoors, noSeats);			//Creating new Car object
-	if (c->isNew()) return c;
-	else {
-		cout << "Unable to Add Vehicle\n"
-			<< "Vehicle already Exists.\n\n";
+		Car* c = new Car(regNum, make, model, age, noDoors, noSeats);			//Creating new Car object
+
+		if (c->isNew()) return c;
+		else {
+			cout << "Unable to Add Vehicle\n"
+				<< "Vehicle already Exists.\n\n";
+			throw - 1;
+		}
+	}
+	catch (int) {
+		cerr << "\nInvalid Input\n"
+			<< "Returning To Options. \n\n\n";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		return(new Car("failveh", "", "", 1, 1, 1));
 	}
+	
 }
 
 Bike* AddBike() {
 	cout << "\n\nCreating Bike\n"
 		 << "-------------\n\n";
+	try {
+		string regNum;
+		cout << "Enter Registration Number:\n";
+		cin >> regNum;
+		string make;
+		cout << "\nEnter Vehicle's Make:\n";
+		cin >> make;
+		string model;
+		cout << "\nEnter Vehicle's Model:\n";
+		cin >> model;
+		int age;
+		cout << "\nEnter Vehicle's Age:\n";
+		if (!(cin >> age))	throw - 1;
+		else if (age < 0) throw - 1;
+		int engineSize;
+		cout << "\nEnter Size of Engine:\n";
+		if (!(cin >> engineSize))	throw - 1;
+		else if (engineSize < 0) throw - 1;
+		int noWheels;
+		cout << "\nEnter Number of Wheels:\n";
+		if (!(cin >> noWheels))	throw - 1;
+		else if (noWheels < 0) throw - 1;
 
-	string regNum;
-	cout << "Enter Registration Number:\n";
-	cin >> regNum;
-	string make;
-	cout << "\nEnter Vehicle's Make:\n";
-	cin >> make;
-	string model;
-	cout << "\nEnter Vehicle's Model:\n";
-	cin >> model;
-	int age;
-	cout << "\nEnter Vehicle's Age:\n";
-	if (!(cin >> age))	throw - 1;
-	int engineSize;
-	cout << "\nEnter Size of Engine:\n";
-	if (!(cin >> engineSize))	throw - 1;
-	int noWheels;
-	cout << "\nEnter Number of Wheels:\n";
-	if (!(cin >> noWheels))	throw - 1;
-
-	Bike* b = new Bike(regNum, make, model, age, engineSize, noWheels);		//Creating new bike object
-	if (b->isNew()) return b;
-	else {
-		cout << "Unable to Add Vehicle\n"
-			<< "Vehicle already Exists.\n\n";
+		Bike* b = new Bike(regNum, make, model, age, engineSize, noWheels);		//Creating new bike object
+		if (b->isNew()) return b;
+		else {
+			cout << "Unable to Add Vehicle\n"
+				<< "Vehicle already Exists.\n\n";
+			return(new Bike("failveh", "", "", 1, 1, 1));
+		}
+	}
+	catch (int) {
+		cerr << "\nInvalid Input\n"
+			<< "Returning To Options. \n\n\n";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		return(new Bike("failveh", "", "", 1, 1, 1));
 	}
 	
@@ -335,7 +360,7 @@ vector<Vehicle*> AddVehicleOption(vector<Vehicle*>& vehicles) {
 		if (input == 1) v = AddCar();
 		else if (input == 2) v = AddBike();
 		else throw - 1;
-		if (v->getRegNum() != "failveh") vehicles.push_back(v);
+		if (v->getRegNum() != "FAILVEH") vehicles.push_back(v);
 		else throw - 1;
 	}
 	catch (int) {
@@ -385,9 +410,9 @@ void CarSearchOption() {
 		cin >> option;
 		switch (option)
 		{
-		case '1': car = CarRegSearch(); if (car->getRegNum() != "FAILVEH") { car->display(); option = DisplayRentalOptions(car); }delete(car); break;			//Performs Requested Search, if the search is successful it displays details
-		case '2': car = CarSeatSearch(); if (car->getRegNum() != "FAILVEH") { car->display(); option = DisplayRentalOptions(car); }delete(car); break;			//Related to the Selected Vehicle. It then deletes the Object and Returns to
-		case '3': car = CarDoorSearch(); if (car->getRegNum() != "FAILVEH") { car->display(); option = DisplayRentalOptions(car); }delete(car); break;			//Car Search Menu.
+		case '1': car = CarRegSearch(); if (car->getRegNum() != "FAILVEH") { display(car); option = DisplayRentalOptions(car); } delete(car); break;			//Performs Requested Search, if the search is successful it displays details
+		case '2': car = CarSeatSearch(); if (car->getRegNum() != "FAILVEH") { display(car); option = DisplayRentalOptions(car); } delete(car); break;			//Related to the Selected Vehicle. It then deletes the Object and Returns to
+		case '3': car = CarDoorSearch(); if (car->getRegNum() != "FAILVEH") { display(car); option = DisplayRentalOptions(car); } delete(car); break;			//Car Search Menu.
 		case '4': break;	
 		default: cout << "Invalid Input\n\n"; break;
 		}
@@ -410,15 +435,12 @@ void BikeSearchOption() {
 		cin >> option;
 		switch (option)
 		{
-		case '1': bike = BikeRegSearch(); if (bike->getRegNum() != "FAILVEH") { bike->display(); option = DisplayRentalOptions(bike); } delete(bike);  break;
-		case '2': bike = BikeEngineSearch(); if (bike->getRegNum() != "FAILVEH") { bike->display(); option = DisplayRentalOptions(bike); } delete(bike);  break;
-		case '3': bike = BikeWheelSearch(); if (bike->getRegNum() != "FAILVEH") { bike->display(); option = DisplayRentalOptions(bike); } delete(bike);   break;
+		case '1': bike = BikeRegSearch(); if (bike->getRegNum() != "FAILVEH") { display(bike); option = DisplayRentalOptions(bike); } delete(bike);  break;
+		case '2': bike = BikeEngineSearch(); if (bike->getRegNum() != "FAILVEH") { display(bike); option = DisplayRentalOptions(bike); } delete(bike);  break;
+		case '3': bike = BikeWheelSearch(); if (bike->getRegNum() != "FAILVEH") { display(bike); option = DisplayRentalOptions(bike); } delete(bike);   break;
 		case '4': break;
 		default: cout << "Invalid Input\n\n"; break;
 		}
-
-		
-		
 
 	} while (option != '4');
 	
@@ -453,10 +475,43 @@ int* CreateDate(string& date) {
 	return dateA;
 }
 
-list<const Rental*> GetRentals(const Vehicle* v) {
+const void display(const Vehicle* v) {
+	string t = v->getRegNum() + " : " + v->getMake() + " " + v->getModel();
+	cout << t << "\n"
+		<< Rental::CreateRentalLine(t) << "\n\n";
+	int no = v->GetNoRentals();
+	double cSum = 0;
+	int dSum = 0;
+	double finalCost = 0;
+	int finalDays = 0;
+
+	auto CalcOverallCost = [cSum](double cCost) {
+		return cSum + cCost;
+	};
+
+	auto CalcOverallDays = [dSum](int cDays) {
+		return dSum + cDays;
+	};
+
+	for (int i = 0; i < no; i++) {
+		Rental* cRental = GetRentals(v, i);
+		finalCost += CalcOverallCost(cRental->CalcTotalCost());
+		finalDays += CalcOverallDays(cRental->GetNoDays());
+		delete(cRental);
+	}
+
+	
+
+	cout << fixed << setprecision(2) << "Cost Per Day: $" << v->getCostPerDay() / 100 << "\n"
+		 << "Total Rental Income: " << finalCost << "\n";
+	cout << "Total Days Rented: " << finalDays << "\n\n";
+}
+
+Rental* GetRentals(const Vehicle* v, int& count) {
 	string line;
-	list<const Rental*> rentals;
+	int i = 0;
 	ifstream rFile(v->getRegNum() + ".txt");
+
 	if (rFile.is_open()) {
 		while (getline(rFile, line, '\n')) {
 			string starts{};
@@ -483,16 +538,18 @@ list<const Rental*> GetRentals(const Vehicle* v) {
 			const RentalDate* start = new RentalDate(startDates[0], startDates[1], startDates[2] );
 			const RentalDate* end = new RentalDate(endDates[0], endDates[1], endDates[2]);
 
-			const Rental* r = new Rental(v, name, address, teleN, start, end, noDays);
+ 			Rental* rental = new Rental(v, name, address, teleN, start, end, noDays);
 			
 			free(startDates);
-			free(endDates);
-
-			rentals.push_back(r);
-		}
-		return rentals;
+			free(endDates);			
+			if (i == count) {
+				return rental;
+			}
+			delete(rental);
+			i++;
+		}		
 	}
-	return rentals;
+	
 }
 
 char DisplayRentalOptions(const Vehicle* v) {
@@ -516,16 +573,17 @@ char DisplayRentalOptions(const Vehicle* v) {
 		else if (option == '2') {
 			cout << "Rental History\n"
 				<< "--------------\n\n";
-			list<const Rental*> rentals = GetRentals(v);
-			list<const Rental*>::iterator it(rentals.begin());
+			
 			char c = '0';
-			int no = 0;
-			int count = 1;
-			while (it != rentals.end() && c != '9') {
-				c = '0';
-				no = (*it)->GetNoRentals();
+			int no = v->GetNoRentals();
 
-				(*it)->DisplayRentalDetails(count);
+			int count = 1;
+			for(int i = 0; i < no; i++){
+				Rental* cRental = GetRentals(v,i);
+				c = '0';
+
+				cRental->DisplayRentalDetails(count);
+				delete(cRental);
 				while (c != '1' && c != '2' && c != '9') {
 					cout << "\n\n1) View Next Record\n"
 						<< "2) View Previous Record\n"
@@ -535,23 +593,22 @@ char DisplayRentalOptions(const Vehicle* v) {
 				}
 				if (c == '1' && count < no) {
 					count++;
-					it++;
 				}
 				else if (c == '2' && count != 1) {
 					count--;
-					it--;
+					i-=2;	
 				}
 				else if(c != '9') {
-					cout << "\n\nUnable to Fetch Data. Rental was out of Range.\n\n";
+					cout << "\n\nUnable to Fetch Data. Rental was out of Range.\n\n";	
+					
 				}
-
-			}
-			it = rentals.begin();
-
-			while (it != rentals.end()) {
-				delete(*it);
-				it++;
-			}
+				else {
+					break;					
+				}
+				
+			}	
+			
+						
 		}
 		else if (option != '9') cout << "Invalid Input.";	
 
@@ -560,39 +617,24 @@ char DisplayRentalOptions(const Vehicle* v) {
 }
 
 void RegSortOption(vector<Vehicle*>& vehicles) {
-	cout << "\n\nSort By Registration Number\n"
+	cout << "\n\nSorted By Registration Number\n"
 		<<"---------------------------";
 	
 		sort(vehicles.begin(), vehicles.end(), sortOnReg);						// Sorts Vehicles using their regnum is alphabetical order.
 		vector<Vehicle*>::iterator it(vehicles.begin());
 		int count = 1;
 		cout << "\n\n";
-		printTableHeaders();
-		while (it != vehicles.end()) {
-			(*it)->printDetails(count, (*it)->getCostPerDay());					// Iterates through all vehicles and prints details.
-			it++; count++;														// Iterator Increments onto next Vehicle and Vehicle Number also increments.
-		}
-		cout << "\n\n";
-		system("pause");
-		cout << "\n\n";	
 	
 }
 
 void CostSortOption(vector<Vehicle*>& vehicles) {
-	cout << "\n\nSort By Cost Per Day\n"
+	cout << "\n\nSorted By Cost Per Day\n"
 		<< "--------------------";
 		sort(vehicles.begin(), vehicles.end(), sortOnCost);
 		vector<Vehicle*>::iterator it(vehicles.begin());
 		int count = 1;
 		cout << "\n\n";
-		printTableHeaders();
-		while (it != vehicles.end()) {
-			(*it)->printDetails(count, (*it)->getCostPerDay());
-			it++; count++;
-		}
-		cout << "\n\n";
-		system("pause");
-		cout << "\n\n";	
+
 }
 
 bool sortOnReg(const Vehicle* lhs, const Vehicle* rhs) {
@@ -824,7 +866,7 @@ const Car* CarSeatSearch() {
 }
 
 const Car* CarDoorSearch() {
-	int noSeats = getNoDoors();
+	int noDoors = getNoDoors();
 
 	string line;
 	const Car* car;
@@ -835,10 +877,10 @@ const Car* CarDoorSearch() {
 		while (getline(vehicleFile, line)) {
 			string cRegNum;
 			int cost;
-			string vType;
-			int age;
+			string vType;			
 			int doors;
 			int seats;
+			int age;
 			string make;
 			string model;
 
@@ -855,7 +897,7 @@ const Car* CarDoorSearch() {
 			ss >> make;
 			ss >> model;
 
-			if (seats == noSeats && vType == "Car") {
+			if (doors == noDoors && vType == "Car") {
 				car = new Car(cRegNum, make, model, age, doors, seats);
 				cars.push_back(car);				
 			}

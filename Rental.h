@@ -23,14 +23,24 @@ public:
 	void CreateRentalFile();
 	void AddRentalDetails();
 	const void DisplayRentalDetails(int count) const;
-	const int GetNoRentals() const;
+	const static string CreateRentalLine(const string& t);
+
+	const int GetNoDays() {
+		return noDays;
+	}
+
+	const Vehicle* GetVehicle() {
+		return vehicle;
+	}
 
 private:
 	const Customer CreateCustomer() const;
 	const Customer CreateCustomer(const string& name, const string& address, const string& teleN) const;
 	const RentalDate* CreateStartDate() const;
 	const RentalDate* CreateEndDate(const RentalDate* start) const;
-	const string CreateRentalLine(const string& t) const;
+	
+
+	
 	
 
 	const Vehicle* vehicle;
